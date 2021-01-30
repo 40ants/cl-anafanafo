@@ -6,6 +6,7 @@
                 #:defsection)
   (:import-from #:function-cache
                 #:defcached)
+  (:import-from #:jonathan)
   (:export
    #:string-width
    #:char-width
