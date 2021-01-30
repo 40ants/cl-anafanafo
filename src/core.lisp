@@ -1,140 +1,177 @@
-(mgl-pax-minimal:define-package :humanize-duration
+(mgl-pax-minimal:define-package :anafanafo
   (:use #:cl)
-  (:nicknames :humanize-duration/core)
-  (:import-from #:local-time-duration)
-  (:import-from #:humanize-duration/ru)
+  (:nicknames :anafanafo/core)
   (:import-from #:mgl-pax-minimal
                 #:section
                 #:defsection)
-  (:import-from #:with-output-to-stream
-                #:with-output-to-stream))
-(in-package humanize-duration)
+  (:import-from #:function-cache
+                #:defcached)
+  (:export
+   #:string-width
+   #:char-width
+   #:load-data))
+(in-package anafanafo)
+
+(defvar *default-font-family* "Helvetica")
+(defvar *default-font-weight* "bold")
+(defvar *default-font-size* 16)
 
 
-(defsection @index (:title "Duration representation for humans!")
-  "This is a small library usefult for time duration humanization."
+(defsection @index (:title "Anafanafo, Common Lisp implementation!")
+  "This library is implementation of JavaScript version of [anafanafo](https://github.com/metabolize/anafanafo).
 
-  (@intro section)
-  (@localization section))
+   It is useful, when you want to know how long in pixels will be the string when the browser will
+   render it in a given font.
 
+   Library uses prebuilt data about character widths from the [original repository](https://github.com/metabolize/anafanafo).
+   It supports these fonts:
 
-(defsection @intro (:title "Introduction")
-  "It is different from LOCAL-TIME-DURATION:HUMAN-READABLE-DURATION, because allows
-   to output only significant parts of a duration object.
+   - Verdana Normal 10px
+   - Verdana Bold 10px
+   - Verdana Normal 11px
+   - Helvetica Bold 11px
 
-   Also it limits a number of part. For example, if there days, hours, minutes and seconds,
-   then most probably it is already not important exactly how many minutes and seconds
-   passed since the moment.
-
-   Compare these two examples:
-
-   ### local-time-duration:human-readable-duration
-
-   ```
-   CL-USER> (local-time-duration:human-readable-duration
-             (local-time-duration:duration :day 5
-                                           :hour 13
-                                           :minute 0
-                                           :sec 14
-                                           :nsec 10042))
-   \" 5 days 13 hours 14 seconds 10042 nsecs\"
-   ```
-
-   ### humanize-duration:humanize-duration
-
-   ```
-   CL-USER> (humanize-duration:humanize-duration
-             (local-time-duration:duration :day 5
-                                           :hour 13
-                                           :minute 0
-                                           :sec 14
-                                           :nsec 10042))
-   \"5 days 13 hours\"
-   ```
-
-   Main job is done at HUMANIZE-DURATION:
-"
-  (humanize-duration function)
-
-  "HUMANIZE-DURATION accepts :FORMAT-PART argument, which is DEFAULT-FORMAT-PART function by default:
-   your own version. This could be useful if you want to support localization to other languages."
-
-  (default-format-part function)
-
-  "Here is how you can localize output for your language")
-
-
-(defsection @localization (:title "Localization")
-  "HUMANIZE-DURATION comes with predefined Russian localization."
-  (humanize-duration/ru:@index section))
-
-
-(defun default-format-part (stream part-type part)
-  "This is should return a string with propertly pluralized form.
-
-   - PART-TYPE argument is a member of (list :weeks :days :hours :minutes :secs :nsecs).
-   - PART is an integer.
-
-   Here are possible results:
-
-       (t :weeks 1) -> \"1 week\"
-       (t :weeks 5) -> \"5 weeks\"
-       (t :day 2) -> \"2 days\"
-"
-  (ecase part-type
-    (:weeks (format stream "~d week~:p" part))
-    (:days (format stream "~d day~:p" part))
-    (:hours (format stream "~d hour~:p" part))
-    (:minutes (format stream "~d minute~:p" part))
-    (:secs (format stream "~d second~:p" part))
-    (:nsecs (format stream "~d nsec~:p" part))))
-
-
-(defun humanize-duration (duration &key stream (n-parts 2) (format-part #'default-format-part))
-  "This is the better version of LOCAL-TIME-DURATION:HUMAN-READABLE-DURATION.
-
-   By default it returns only 2 most significant duration parts.
-
-   If duration is 2 hour, 43 seconds and 15 nanoseconsds, then
-   function will return \"2 hours 43 seconds\":
-
-   ```lisp
-   CL-USER> (ultralisp/utils/time:humanize-duration
-             (local-time-duration:duration :hour 2
-                                           :sec 43
-                                           :nsec 15))
-   \"2 hours 43 seconds\"
-   ```
-
-   Also, you can pass a `:format-part` argument.
-   It should be a function of three arguments:
-   `(stream part-type part)` where `part-type` is a keyword
-   from this list:
-
-   ```lisp
-   (list :weeks :days :hours :minutes :secs :nsecs)
-   ```"
-  (check-type duration local-time-duration:duration)
-  (check-type n-parts (integer 1 6))
+   To use it, you need to load data using the LOAD-DATA function:"
   
-  (multiple-value-bind (nsecs secs minutes hours days weeks)
-      (local-time-duration::decode-duration duration :weeks t)
-    (with-output-to-stream (stream stream)
-      (let ((part-types (list :weeks :days :hours :minutes :secs :nsecs))
-            (parts (list weeks days hours minutes secs nsecs)))
-        (if (every #'zerop parts)
-            (format stream "0 length")
-            (loop with n-printed = 0
-                  for part in parts
-                  for part-type in part-types
-                  unless (zerop part)
-                  do (unless (zerop n-printed)
-                       ;; Add a space between parts
-                       (format stream " "))
-                     (funcall format-part
-                              stream
-                              part-type
-                              part)
-                     (incf n-printed)
-                  when (>= n-printed n-parts)
-                  do (return)))))))
+  (load-data function)
+
+  "Then you can calculate the width of the string:"
+
+  (string-width function)
+
+  "Or width of a single character:"
+
+  (char-width function))
+
+
+(defclass data ()
+  ((family :initarg :family
+           :initform *default-font-family*
+           :reader family)
+   (weight :initarg :weight
+           :initform *default-font-weight*
+           :reader weight)
+   (size :initarg :size
+         :initform *default-font-size*
+         :reader size)
+   (data-font-size :initarg :data-font-size
+         :reader data-font-size)
+   (filename :initarg :filename
+             :reader filename)
+   (data :initarg :data
+         :reader data)))
+
+
+(defmethod print-object ((obj data) stream)
+  (print-unreadable-object (obj stream :type t)
+    (format stream "\"~A\" \"~A\" ~Apx :file \"~A\""
+            (family obj)
+            (weight obj)
+            (size obj)
+            (filename obj))))
+
+
+;; (defvar *font-to-filename* '(("Verdana Normal 10px" . "data/verdana-10px-normal.json")
+;;                              ("Verdana Bold 10px" . "data/verdana-10px-bold.json")
+;;                              ("Verdana Normal 11px" . "data/verdana-11px-normal.json")
+;;                              ("Helvetica Bold 11px" . "data/helvetica-11px-bold.json")))
+
+
+(defcached
+    load-data (&key
+               (family *default-font-family*)
+               (weight *default-font-weight*)
+               (size *default-font-size*))
+  "Loads data for specified font name.
+
+   Returns an object which can be used to retrieve text width:
+
+   ```lisp
+   CL-USER> (load-data \"Verdana Normal 10px\")
+
+   #<DATA \"Verdana Normal 10px\" :file \"data/verdana-10px-normal.json\">
+   ```
+"
+  (check-type family string)
+  (check-type weight string)
+
+  (let* ((data-font-size 11)
+         (filename (format nil
+                           "data/~A-~Apx-~A.json"
+                           (string-downcase family)
+                           data-font-size
+                           (string-downcase weight)))
+         (filename (uiop:parse-unix-namestring filename))
+         (path (asdf:system-relative-pathname
+                "anafanafo"
+                filename)))
+    (unless (probe-file path)
+      (error "Unable to find file for font ~A ~A. File ~A does not exist."
+             family
+             weight
+             path))
+    (make-instance 'data
+                   :family family
+                   :weight weight
+                   :size size
+                   :data-font-size data-font-size
+                   :filename filename
+                   :data (jonathan:parse (uiop:read-file-string path)))))
+
+
+(defun scale-ratio (data)
+  (/ (size data)
+     (data-font-size data)))
+
+
+(defun char-width (data char &key (guess t))
+  "Returns a float width of given char. Width is measured in pixels.
+
+   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+              (values (cons #\щ
+                            (anafanafo:char-width data #\щ))
+                      (cons #\i
+                            (anafanafo:char-width data #\i))))
+   (#\CYRILLIC_SMALL_LETTER_SHCHA . 8.88)
+   (#\i . 2.74)
+"
+  (check-type data data)
+  (check-type char character)
+  
+  (loop with code = (char-code char)
+        for (lower upper width) in (data data)
+        when (<= lower code upper)
+          do (return (* width
+                        (scale-ratio data)))
+        finally (if guess
+                    (return (char-width data #\m))
+                    (error "Unable to find width for ~S character"
+                           char))))
+
+
+(defun string-width (data text)
+  "Returns width of the text in pixels.
+
+   Result just a sum of all text characters:
+
+   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+              (anafanafo:string-width data
+                                      \"борщ\"))
+   27.32
+   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+              (+ (anafanafo:char-width data
+                                       #\б)
+                 (anafanafo:char-width data
+                                       #\о)
+                 (anafanafo:char-width data
+                                       #\р)
+                 (anafanafo:char-width data
+                                       #\щ)))
+   27.32"
+  (check-type data data)
+  (check-type text string)
+  
+  (loop for char across text
+        when (char= char #\Newline)
+          do (error "Function STRING-WIDTH does not support strings with new lines yet!")
+        summing (char-width data char)))

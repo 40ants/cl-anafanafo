@@ -14,12 +14,12 @@
   
   (let ((root-section (symbol-value root-section-name)))
     (mgl-pax:update-asdf-system-readmes root-section
-                                        :humanize-duration)
+                                        :anafanafo)
   
     (mgl-pax:update-asdf-system-html-docs
-     root-section :humanize-duration
+     root-section :anafanafo
      :target-dir "docs/build/"
      :pages `((:objects (,root-section)
                :source-uri-fn ,(pax:make-github-source-uri-fn
-                                :humanize-duration
-                                "https://github.com/40ants/humanize-duration"))))))
+                                :anafanafo
+                                "https://github.com/40ants/cl-anafanafo"))))))
