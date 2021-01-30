@@ -20,6 +20,7 @@ jobs:
         env:
           LISP: sbcl-bin
         run: |
+          apt-get install libcurl
           curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | sh
           echo /home/runner/.roswell/bin >> $GITHUB_PATH
       - name: Check CL Version
