@@ -16,6 +16,14 @@ jobs:
       - uses: actions/checkout@v1
       - name: Show env
         run: 'env | sort -u'
+        
+      - name: Start SSH session
+        uses: luchihoratiu/debug-via-ssh@main
+        with:
+          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+          NGROK_REGION: eu
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+      
       - name: Install Roswell
         env:
           LISP: sbcl-bin
