@@ -7,7 +7,7 @@ exec ros -Q -- $0 "$@"
   (ros:ensure-asdf)
   #+quicklisp
   (ql:quickload '(log4cl
-                  example-docs)
+                  anafanafo-docs)
                 :silent t))
 
 (defpackage :script.build-docs
@@ -58,7 +58,7 @@ behaviour could be overriden by keyword argument ``:raise t``."
 (defun build-docs ()
   (log:info "Building documentation in ./docs/")
 
-  (example-docs:build-docs)
+  (anafanafo-docs:build-docs)
   
   (uiop:with-output-file (s "docs/build/.nojekyll" :if-exists :overwrite)
     (declare (ignorable s))))
