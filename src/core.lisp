@@ -27,10 +27,16 @@
    Library uses prebuilt data about character widths from the [original repository](https://github.com/metabolize/anafanafo).
    It supports these fonts:
 
-   - Verdana Normal 10px
-   - Verdana Bold 10px
-   - Verdana Normal 11px
-   - Helvetica Bold 11px
+   - Verdana Normal
+   - Verdana Bold
+   - Helvetica Bold
+
+   This implementation differ from the JavaScript version.
+   It returns text width for any font size, automatically applying
+   needed math transformation. All you need is to specify font family
+   and weight.
+
+   Default font is \"Helvetica Bold 16px\".
 
    To use it, you need to load data using the LOAD-DATA function:"
   
@@ -72,10 +78,24 @@
             (filename obj))))
 
 
-;; (defvar *font-to-filename* '(("Verdana Normal 10px" . "data/verdana-10px-normal.json")
-;;                              ("Verdana Bold 10px" . "data/verdana-10px-bold.json")
-;;                              ("Verdana Normal 11px" . "data/verdana-11px-normal.json")
-;;                              ("Helvetica Bold 11px" . "data/helvetica-11px-bold.json")))
+(defcached guess-best-filename (family weight)
+  (loop for size downfrom 20 to 10
+        for filename = (format nil
+                               "data/~A-~Apx-~A.json"
+                               (string-downcase family)
+                               size
+                               (string-downcase weight))
+        for path = (asdf:system-relative-pathname "anafanafo"
+                                                  (uiop:parse-unix-namestring filename))
+        when (probe-file path)
+          do (return (values path
+                             size))
+        finally
+           (error "Unable to find suitable file for font ~A ~A in ~A dir."
+                  family
+                  weight
+                  (asdf:system-relative-pathname "anafanafo"
+                                                 #P"data/"))))
 
 
 (defcached
@@ -88,35 +108,24 @@
    Returns an object which can be used to retrieve text width:
 
    ```lisp
-   CL-USER> (load-data \"Verdana Normal 10px\")
 
-   #<DATA \"Verdana Normal 10px\" :file \"data/verdana-10px-normal.json\">
+   CL-USER> (anafanafo:load-data :family \"Verdana\"
+                                 :weight \"bold\")
+   #<ANAFANAFO::DATA \"Verdana\" \"bold\" 16px :file \"data/verdana-10px-bold.json\">
+
    ```
 "
   (check-type family string)
   (check-type weight string)
 
-  (let* ((data-font-size 11)
-         (filename (format nil
-                           "data/~A-~Apx-~A.json"
-                           (string-downcase family)
-                           data-font-size
-                           (string-downcase weight)))
-         (filename (uiop:parse-unix-namestring filename))
-         (path (asdf:system-relative-pathname
-                "anafanafo"
-                filename)))
-    (unless (probe-file path)
-      (error "Unable to find file for font ~A ~A. File ~A does not exist."
-             family
-             weight
-             path))
+  (multiple-value-bind (path data-font-size)
+      (guess-best-filename family weight)
     (make-instance 'data
                    :family family
                    :weight weight
                    :size size
                    :data-font-size data-font-size
-                   :filename filename
+                   :filename path
                    :data (jonathan:parse (uiop:read-file-string path)))))
 
 
@@ -128,13 +137,16 @@
 (defun char-width (data char &key (guess t))
   "Returns a float width of given char. Width is measured in pixels.
 
-   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+   ```lisp
+   CL-USER> (let ((data (anafanafo:load-data :family \"Verdana\"
+                                             :weight \"normal\")))
               (values (cons #\щ
                             (anafanafo:char-width data #\щ))
                       (cons #\i
                             (anafanafo:char-width data #\i))))
-   (#\CYRILLIC_SMALL_LETTER_SHCHA . 8.88)
-   (#\i . 2.74)
+   (#\CYRILLIC_SMALL_LETTER_SHCHA . 14.196364)
+   (#\i . 4.3927274)
+   ```
 "
   (check-type data data)
   (check-type char character)
@@ -155,11 +167,14 @@
 
    Result just a sum of all text characters:
 
-   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+   ```lisp
+   CL-USER> (let ((data (anafanafo:load-data :family \"Verdana\"
+                                             :weight \"normal\")))
               (anafanafo:string-width data
                                       \"борщ\"))
-   27.32
-   CL-USER> (let ((data (anafanafo:load-data \"Verdana Normal 10px\")))
+   43.70909
+   CL-USER> (let ((data (anafanafo:load-data :family \"Verdana\"
+                                             :weight \"normal\")))
               (+ (anafanafo:char-width data
                                        #\б)
                  (anafanafo:char-width data
@@ -168,7 +183,8 @@
                                        #\р)
                  (anafanafo:char-width data
                                        #\щ)))
-   27.32"
+   43.70909
+   ```"
   (check-type data data)
   (check-type text string)
   

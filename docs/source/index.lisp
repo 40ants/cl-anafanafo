@@ -1,12 +1,12 @@
-(defpackage #:humanize-duration-docs/docs
-  (:nicknames #:humanize-duration-docs)
+(defpackage #:anafanafo-docs/docs
+  (:nicknames #:anafanafo-docs)
   (:use #:cl)
   (:import-from #:mgl-pax)
-  (:import-from #:humanize-duration/core
+  (:import-from #:anafanafo/core
                 #:@index)
   (:export
    #:build))
-(in-package humanize-duration-docs/docs)
+(in-package anafanafo-docs/docs)
 
 
 (defun build (&optional (root-section-name '@index))

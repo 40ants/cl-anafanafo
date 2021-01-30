@@ -1,5 +1,5 @@
-(defsystem "humanize-duration-docs"
+(defsystem "anafanafo-docs"
   :build-pathname "docs/build/"
   :class :package-inferred-system
   :pathname "docs/source/"
-  :depends-on ("humanize-duration-docs/index"))
+  :depends-on ("anafanafo-docs/index"))
