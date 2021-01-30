@@ -17,19 +17,19 @@ jobs:
       - name: Show env
         run: 'env | sort -u'
         
-      - name: Start SSH session
-        uses: luchihoratiu/debug-via-ssh@main
-        with:
-          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-          NGROK_REGION: eu
-          SSH_PASS: ${{ secrets.SSH_PASS }}
+      # - name: Start SSH session
+      #   uses: luchihoratiu/debug-via-ssh@main
+      #   with:
+      #     NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      #     NGROK_REGION: eu
+      #     SSH_PASS: ${{ secrets.SSH_PASS }}
       
       - name: Install Roswell
         env:
           LISP: sbcl-bin
         run: |
-          apt-get install libcurl
-          curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | sh
+          sudo apt-get install libcurl4-openssl-dev
+          curl -L https://raw.githubusercontent.com/svetlyak40wt/roswell/patches/scripts/install-for-ci.sh | sh
           echo /home/runner/.roswell/bin >> $GITHUB_PATH
       - name: Check CL Version
         run: |
