@@ -78,17 +78,45 @@
             (filename obj))))
 
 
-(defcached guess-best-filename (family weight)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun relative-path (full-path prefix-path)
+    (make-pathname :directory (cons :relative
+                                    (nthcdr (length (pathname-directory prefix-path))
+                                            (pathname-directory full-path)))
+                   :name (pathname-name full-path)
+                   :type (pathname-type full-path)))
+  
+  (defun preload-data ()
+    (loop with data-dir = (asdf:system-relative-pathname "anafanafo"
+                                                         #P"data/")
+          with data-files = (directory
+                             (uiop:merge-pathnames* #P"*.json"
+                                                    data-dir))
+          for filename in data-files
+          for relative-filename = (relative-path filename
+                                                 data-dir)
+          for content = (jonathan:parse (uiop:read-file-string filename))
+          collect (cons (princ-to-string
+                         relative-filename)
+                        content)))
+
+  (defvar *preloaded-data*
+    (preload-data)))
+
+
+(defcached get-best-font-data (family weight)
   (loop for size downfrom 20 to 10
         for filename = (format nil
-                               "data/~A-~Apx-~A.json"
+                               "~A-~Apx-~A.json"
                                (string-downcase family)
                                size
                                (string-downcase weight))
-        for path = (asdf:system-relative-pathname "anafanafo"
-                                                  (uiop:parse-unix-namestring filename))
-        when (probe-file path)
-          do (return (values path
+        for data = (assoc filename
+                          *preloaded-data*
+                          :test #'string=)
+        when data
+          do (return (values filename
+                             (cdr data)
                              size))
         finally
            (error "Unable to find suitable file for font ~A ~A in ~A dir."
@@ -118,15 +146,15 @@
   (check-type family string)
   (check-type weight string)
 
-  (multiple-value-bind (path data-font-size)
-      (guess-best-filename family weight)
+  (multiple-value-bind (path font-data data-font-size)
+      (get-best-font-data family weight)
     (make-instance 'data
                    :family family
                    :weight weight
                    :size size
                    :data-font-size data-font-size
                    :filename path
-                   :data (jonathan:parse (uiop:read-file-string path)))))
+                   :data font-data)))
 
 
 (defun scale-ratio (data)
