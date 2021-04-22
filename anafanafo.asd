@@ -4,5 +4,5 @@
   :license "Unlicense"
   :pathname "src"
   :description "Calculates text width as if it be rendered by a web browser."
-  "https://github.com/40ants/cl-anafanafo"
+  :source-control (:git "https://github.com/40ants/cl-anafanafo")
   :depends-on ("anafanafo/core"))
