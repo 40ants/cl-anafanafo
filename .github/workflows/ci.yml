@@ -1,11 +1,12 @@
 {
-  "name": "DOCS",
+  "name": "CI",
   "on": {
     "push": {
       "branches": [
         "master"
       ]
     },
+    "pull_request": null,
     "schedule": [
       {
         "cron": "0 10 * * 1"
@@ -13,7 +14,7 @@
     ]
   },
   "jobs": {
-    "build-docs": {
+    "linter": {
       "runs-on": "ubuntu-latest",
       "env": {
         "OS": "ubuntu-latest",
@@ -60,12 +61,14 @@
           "if": "steps.cache.outputs.cache-hit != 'true'"
         },
         {
-          "name": "Build Docs",
-          "uses": "40ants/build-docs@v1",
-          "with": {
-            "asdf-system": "anafanafo",
-            "error-on-warnings": true
-          }
+          "name": "Install SBLint",
+          "run": "\necho 'dist ultralisp http://dist.ultralisp.org' > qlfile\nqlot update\nqlot exec ros install 40ants-linter\n",
+          "shell": "bash"
+        },
+        {
+          "name": "Run Linter",
+          "run": "qlot exec 40ants-linter --system \"anafanafo\"",
+          "shell": "bash"
         }
       ]
     }

@@ -1,8 +1,7 @@
-(mgl-pax-minimal:define-package :anafanafo
+(uiop:define-package :anafanafo
   (:use #:cl)
   (:nicknames :anafanafo/core)
-  (:import-from #:mgl-pax-minimal
-                #:section
+  (:import-from #:40ants-doc
                 #:defsection)
   (:import-from #:function-cache
                 #:defcached)
