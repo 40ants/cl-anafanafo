@@ -6,13 +6,15 @@
 
 ## 0.2.0 (2021-09-11)
 
-Switched to `JSOWN` because Jonathan fails to parse floats
+* Switched to `JSOWN` because Jonathan fails to parse floats
 
 Jonathan issues error when parsing:
 
-```lisp
-(jonathan:parse "3.06")
-```
+  `lisp
+  (jonathan:parse "3.06")
+`
+- Moved to a new documentation building engine.
+
 <a id="x-28ANAFANAFO-2FCHANGELOG-3A-3A-7C0-2E1-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.1.0 (2021-01-31)

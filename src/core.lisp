@@ -9,10 +9,14 @@
   (:import-from #:jsown)
   (:import-from #:docs-config
                 #:docs-config)
+  (:import-from #:anafanafo/changelog
+                #:@changelog)
   (:export #:string-width
            #:char-width
            #:load-data
-           #:@index))
+           #:@index
+           #:@readme
+           #:@changelog))
 (in-package anafanafo)
 
 (defvar *default-font-family* "Helvetica")
