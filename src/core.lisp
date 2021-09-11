@@ -5,7 +5,7 @@
                 #:defsection)
   (:import-from #:function-cache
                 #:defcached)
-  (:import-from #:jonathan)
+  (:import-from #:jsown)
   (:export
    #:string-width
    #:char-width
@@ -94,7 +94,7 @@
           for filename in data-files
           for relative-filename = (relative-path filename
                                                  data-dir)
-          for content = (jonathan:parse (uiop:read-file-string filename))
+          for content = (jsown:parse (uiop:read-file-string filename))
           collect (cons (princ-to-string
                          relative-filename)
                         content)))
