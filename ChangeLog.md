@@ -6,7 +6,7 @@
 
 ## 0.2.0 (2021-09-11)
 
-* Switched to `JSOWN` because Jonathan fails to parse floats
+* Switched to `JSOWN` because Jonathan fails to parse floats.
 
 Jonathan issues error when parsing:
 
