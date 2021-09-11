@@ -2,19 +2,32 @@
   (:use #:cl)
   (:nicknames :anafanafo/core)
   (:import-from #:40ants-doc
-                #:defsection)
+                #:defsection
+                #:defsection-copy)
   (:import-from #:function-cache
                 #:defcached)
   (:import-from #:jsown)
-  (:export
-   #:string-width
-   #:char-width
-   #:load-data))
+  (:import-from #:docs-config
+                #:docs-config)
+  (:export #:string-width
+           #:char-width
+           #:load-data
+           #:@index))
 (in-package anafanafo)
 
 (defvar *default-font-family* "Helvetica")
 (defvar *default-font-weight* "bold")
 (defvar *default-font-size* 16)
+
+
+(defmethod docs-config ((system (eql (asdf:find-system "anafanafo"))))
+  ;; 40ANTS-DOC-THEME-40ANTS system will bring
+  ;; as dependency a full 40ANTS-DOC but we don't want
+  ;; unnecessary dependencies here:
+  (ql:quickload :40ants-doc-theme-40ants)
+  (list :theme
+        (find-symbol "40ANTS-THEME"
+                     (find-package "40ANTS-DOC-THEME-40ANTS"))))
 
 
 (defsection @index (:title "Anafanafo, Common Lisp implementation!")
@@ -50,6 +63,9 @@
   (char-width function))
 
 
+(defsection-copy @readme @index)
+
+
 (defclass data ()
   ((family :initarg :family
            :initform *default-font-family*
@@ -61,7 +77,7 @@
          :initform *default-font-size*
          :reader size)
    (data-font-size :initarg :data-font-size
-         :reader data-font-size)
+                   :reader data-font-size)
    (filename :initarg :filename
              :reader filename)
    (data :initarg :data
