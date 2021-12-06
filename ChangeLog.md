@@ -10,7 +10,7 @@
 
 Jonathan issues error when parsing:
 
-  `lisp
+`lisp
   (jonathan:parse "3.06")
 `
 - Moved to a new documentation building engine.
