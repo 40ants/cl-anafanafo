@@ -27,7 +27,7 @@ To use it, you need to load data using the [`load-data`][f2c2] function:
 
 <a id="x-28ANAFANAFO-3ALOAD-DATA-20FUNCTION-29"></a>
 
-## [function](6cb8) `anafanafo:load-data` &key (family \*default-font-family\*) (weight \*default-font-weight\*) (size \*default-font-size\*)
+## [function](de0d) `anafanafo:load-data` &key (family \*default-font-family\*) (weight \*default-font-weight\*) (size \*default-font-size\*)
 
 Loads data for specified font name.
 
@@ -43,7 +43,7 @@ Then you can calculate the width of the string:
 
 <a id="x-28ANAFANAFO-3ASTRING-WIDTH-20FUNCTION-29"></a>
 
-## [function](c901) `anafanafo:string-width` data text
+## [function](d27b) `anafanafo:string-width` data text
 
 Returns width of the text in pixels.
 
@@ -71,7 +71,7 @@ Or width of a single character:
 
 <a id="x-28ANAFANAFO-3ACHAR-WIDTH-20FUNCTION-29"></a>
 
-## [function](90dd) `anafanafo:char-width` data char &key (guess t)
+## [function](b763) `anafanafo:char-width` data char &key (guess t)
 
 Returns a float width of given char. Width is measured in pixels.
 
@@ -87,9 +87,9 @@ CL-USER> (let ((data (anafanafo:load-data :family "Verdana"
 ```
 
 [f2c2]: #x-28ANAFANAFO-3ALOAD-DATA-20FUNCTION-29
-[6cb8]: https://github.com/40ants/cl-anafanafo/blob/43d2e3085941642626f2cdd71326f33c07a234c5/src/core.lisp#L148
-[90dd]: https://github.com/40ants/cl-anafanafo/blob/43d2e3085941642626f2cdd71326f33c07a234c5/src/core.lisp#L184
-[c901]: https://github.com/40ants/cl-anafanafo/blob/43d2e3085941642626f2cdd71326f33c07a234c5/src/core.lisp#L212
+[de0d]: https://github.com/40ants/cl-anafanafo/blob/b9cfd6cec299f4226f1afbcfc6d7ea5a1141d158/src/core.lisp#L148
+[b763]: https://github.com/40ants/cl-anafanafo/blob/b9cfd6cec299f4226f1afbcfc6d7ea5a1141d158/src/core.lisp#L184
+[d27b]: https://github.com/40ants/cl-anafanafo/blob/b9cfd6cec299f4226f1afbcfc6d7ea5a1141d158/src/core.lisp#L212
 [eae8]: https://github.com/metabolize/anafanafo
 
 * * *
