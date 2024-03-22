@@ -12,6 +12,7 @@
 (defworkflow docs
   :on-push-to "master"
   :by-cron "0 10 * * 1"
+  :on-pull-request t
   :cache t
   :jobs ((build-docs)))
 
