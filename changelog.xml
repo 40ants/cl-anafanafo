@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>anafanafo ChangeLog</title>
+        <generator>xml-emitter</generator>
+        <language>en-us</language>
+        <item>
+            <title>0.2.0  (2021-09-11)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Switched to &lt;code&gt;JSOWN&lt;/code&gt; because Jonathan fails to parse floats.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Jonathan issues error when parsing:&lt;/p&gt;&lt;p&gt;&lt;code&gt;lisp
+  (jonathan:parse &amp;quot;3.06&amp;quot;)
+&lt;/code&gt;
+- Moved to a new documentation building engine.&lt;/p&gt;</description>
+            <pubDate>Sat, 11 Sep 2021 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.1.0  (2021-01-31)</title>
+            <description>&lt;p&gt;Initial version.&lt;/p&gt;</description>
+            <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+        </item>
+    </channel>
+</rss>
