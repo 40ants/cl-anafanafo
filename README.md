@@ -11,9 +11,7 @@ Library uses prebuilt data about character widths from the [original repository]
 It supports these fonts:
 
 * Verdana Normal
-
 * Verdana Bold
-
 * Helvetica Bold
 
 This implementation differ from the JavaScript version.
@@ -27,7 +25,7 @@ To use it, you need to load data using the [`load-data`][f2c2] function:
 
 <a id="x-28ANAFANAFO-3ALOAD-DATA-20FUNCTION-29"></a>
 
-## [function](f984) `anafanafo:load-data` &key (family \*default-font-family\*) (weight \*default-font-weight\*) (size \*default-font-size\*)
+## [function](2a91) `anafanafo:load-data` &key (family \*default-font-family\*) (weight \*default-font-weight\*) (size \*default-font-size\*)
 
 Loads data for specified font name.
 
@@ -43,7 +41,7 @@ Then you can calculate the width of the string:
 
 <a id="x-28ANAFANAFO-3ASTRING-WIDTH-20FUNCTION-29"></a>
 
-## [function](bde3) `anafanafo:string-width` data text
+## [function](895c) `anafanafo:string-width` data text
 
 Returns width of the text in pixels.
 
@@ -71,7 +69,7 @@ Or width of a single character:
 
 <a id="x-28ANAFANAFO-3ACHAR-WIDTH-20FUNCTION-29"></a>
 
-## [function](2e26) `anafanafo:char-width` data char &key (guess t)
+## [function](f846) `anafanafo:char-width` data char &key (guess t)
 
 Returns a float width of given char. Width is measured in pixels.
 
@@ -87,9 +85,9 @@ CL-USER> (let ((data (anafanafo:load-data :family "Verdana"
 ```
 
 [f2c2]: #x-28ANAFANAFO-3ALOAD-DATA-20FUNCTION-29
-[f984]: https://github.com/40ants/cl-anafanafo/blob/b57230de56e62ce54bd12f476e5c2e4456c81d53/src/core.lisp#L148
-[2e26]: https://github.com/40ants/cl-anafanafo/blob/b57230de56e62ce54bd12f476e5c2e4456c81d53/src/core.lisp#L184
-[bde3]: https://github.com/40ants/cl-anafanafo/blob/b57230de56e62ce54bd12f476e5c2e4456c81d53/src/core.lisp#L212
+[2a91]: https://github.com/40ants/cl-anafanafo/blob/306108d08c18fb4ff3ddc1df2db770a49d715db6/src/core.lisp#L148
+[f846]: https://github.com/40ants/cl-anafanafo/blob/306108d08c18fb4ff3ddc1df2db770a49d715db6/src/core.lisp#L184
+[895c]: https://github.com/40ants/cl-anafanafo/blob/306108d08c18fb4ff3ddc1df2db770a49d715db6/src/core.lisp#L212
 [eae8]: https://github.com/metabolize/anafanafo
 
 * * *
